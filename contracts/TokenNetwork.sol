@@ -410,7 +410,7 @@ contract TokenNetwork is Utils {
     function registerSecretAndUnlock(
         uint256 channel_identifier,
         address partner,
-        uint64 expiration_block,
+        uint256 expiration_block,
         uint256 locked_amount,
         bytes merkle_proof,
         bytes32 secret)
@@ -445,7 +445,7 @@ contract TokenNetwork is Utils {
     function unlock(
         uint256 channel_identifier,
         address partner,
-        uint64 expiration_block,
+        uint256 expiration_block,
         uint256 locked_amount,
         bytes merkle_proof,
         bytes32 secret)
