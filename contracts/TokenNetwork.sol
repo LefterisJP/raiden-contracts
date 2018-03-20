@@ -18,6 +18,9 @@ contract TokenNetwork is Utils {
     // Instance of SecretRegistry used for storing secrets revealed in a mediating transfer.
     SecretRegistry public secret_registry;
 
+    // Chain ID as specified by EIP155 used in balance proof signatures to avoid replay attacks
+    uint256 public chain_id;
+
     // Channel identifier is a uint256, incremented after each new channel
     mapping (uint256 => Channel) public channels;
 
@@ -122,9 +125,10 @@ contract TokenNetwork is Utils {
      *  Constructor
      */
 
-    function TokenNetwork(address _token_address, address _secret_registry) public {
+    function TokenNetwork(address _token_address, address _secret_registry, uint256 _chain_id) public {
         require(_token_address != 0x0);
         require(_secret_registry != 0x0);
+        require(_chain_id > 0);
         require(contractExists(_token_address));
         require(contractExists(_secret_registry));
 
@@ -134,6 +138,7 @@ contract TokenNetwork is Utils {
         require(token.totalSupply() > 0);
 
         secret_registry = SecretRegistry(_secret_registry);
+        chain_id = _chain_id;
     }
 
     /*
@@ -616,6 +621,7 @@ contract TokenNetwork is Utils {
             locksroot,
             channel_identifier,
             address(this),
+            chain_id,
             additional_hash
         );
 
