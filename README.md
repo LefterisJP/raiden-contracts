@@ -18,19 +18,23 @@ pip install -r requirements.txt
 
 ## Deployment on a testnet
 
+! You need to have the compiled contract data first. You can run `populus compile` for that.
+
 ```
 # Following calls are equivalent
 
 python -m deploy
 
-python -m deploy.deploy_testnet \
-       --chain ropsten \
+python -m deploy \
+       --rpc-provider http://127.0.0.1:8545 \
+       --json build/contracts.json
        --owner 0x5601Ea8445A5d96EEeBF89A67C4199FbB7a43Fbb \
+       --wait 300 \
        --token-name CustomToken --token-symbol TKN \
        --supply 10000000 --token-decimals 18
 
 # Provide a custom deployed token
-python -m deploy.deploy_testnet --token-address <TOKEN_ADDRESS>
+python -m deploy --token-address <TOKEN_ADDRESS>
 
 ```
 
