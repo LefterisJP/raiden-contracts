@@ -270,13 +270,16 @@ contract TokenNetwork is Utils {
         // Signature must be from the channel partner
         require(msg.sender != partner_address);
 
-        updateParticipantStruct(
-            channel_identifier,
-            partner_address,
-            nonce,
-            locksroot,
-            transferred_amount
-        );
+        // If there are off-chain transfers, update the participant's state
+        if (nonce > 0) {
+            updateParticipantStruct(
+                channel_identifier,
+                partner_address,
+                nonce,
+                locksroot,
+                transferred_amount
+            );
+        }
 
         ChannelClosed(channel_identifier, msg.sender);
     }
@@ -390,15 +393,18 @@ contract TokenNetwork is Utils {
             signature
         );
 
+        // If there are off-chain transfers, update the participant's state
         // This will reset the transferred amount, invalidating any unlocked locks that were
         // unlocked but not included in the new locksroot
-        updateParticipantStruct(
-            channel_identifier,
-            closing_participant,
-            nonce,
-            locksroot,
-            transferred_amount
-        );
+        if (nonce > 0) {
+            updateParticipantStruct(
+                channel_identifier,
+                closing_participant,
+                nonce,
+                locksroot,
+                transferred_amount
+            );
+        }
 
         TransferUpdated(channel_identifier, closing_participant);
     }
