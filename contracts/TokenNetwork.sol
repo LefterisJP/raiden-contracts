@@ -572,6 +572,41 @@ contract TokenNetwork is Utils {
 
     }*/
 
+    function getChannelInfo(
+        uint256 channel_identifier)
+        view
+        external
+        returns (uint256, address, uint256)
+    {
+        Channel storage channel = channels[channel_identifier];
+        ClosingRequest storage closing_request = closing_requests[channel_identifier];
+
+        return (
+            channel.settle_timeout,
+            closing_request.closing_participant,
+            closing_request.settle_block_number
+        );
+    }
+
+    function getChannelParticipantInfo(
+        uint256 channel_identifier,
+        address participant)
+        view
+        external
+        returns (bool, uint256, uint256, uint64, bytes32)
+    {
+        Channel storage channel = channels[channel_identifier];
+        Participant storage participant_state = channel.participants[participant];
+
+        return (
+            participant_state.initialized,
+            participant_state.deposit,
+            participant_state.transferred_amount,
+            participant_state.nonce,
+            participant_state.locksroot
+        );
+    }
+
     /*
      * Internal Functions
      */
